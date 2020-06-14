@@ -1,0 +1,135 @@
+---
+title: "Homework 5"
+author: "Group I: Demirbilek, Taroni, Zagatti"
+date: "Spring 2020"
+output:
+  html_document:
+    toc: no
+header-includes:
+- \usepackage{color}
+- \definecolor{Purple}{HTML}{911146}
+- \definecolor{Orange}{HTML}{CF4A30}
+- \setbeamercolor{alerted text}{fg=Orange}
+- \setbeamercolor{frametitle}{bg=Purple}
+institute: University of Udine & University of Trieste
+graphics: yes
+fontsize: 10pt
+---
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(fig.align = 'center', warning=FALSE, message=FALSE, fig.asp=0.625, dev='png', global.par = TRUE, dev.args=list(pointsize=10), fig.path = 'figs/', fig.height = 10, fig.width = 10)
+```
+
+```{r setup, include=FALSE}
+library(MASS)
+library(knitr)
+local({
+  hook_plot = knit_hooks$get('plot')
+  knit_hooks$set(plot = function(x, options) {
+    paste0('\n\n----\n\n', hook_plot(x, options))
+  })
+})
+```
+
+# {.tabset}
+
+## DAAG {.tabset}
+
+
+### Exercise 4.21
+
+
+### Exercise 7.2
+
+**Use anova() to compare the two models: 
+`roller.lm <- lm(depression ~ weight, data = roller)`, `roller.lm2 <- lm(depression ~ weight + I(weigth^2), data = roller)`
+Is there any justification for including the squared term?**
+
+
+*solution :* 
+
+```{r basic 1, echo=TRUE,warning=FALSE}
+library(DAAG)
+#help(roller)
+roller.lm <- lm(depression ~ weight, data = roller)
+roller.lm2 <- lm(depression ~ weight + I(weight^2), data = roller)
+anova(roller.lm , roller.lm2)
+
+```
+These two models differ only in the use of `weight^2`. So ANOVA will test whether or not including this leads significant improvement. Adding this term spawned non-significant result (p=0.259). Thus we should reject second model, in other words adding `weight^2`didn't lead better result.
+
+## CS {.tabset}
+
+
+### Exercise 3.2
+
+
+
+### Exercise 4.4
+
+**Suppose that you have $n$ independent measurements of times between major aircraft disasters, $t_i$ , and believe that the probability density function for the $t_i$’s is of the form: $f(t) = ke^{−\lambda t^2}$ $t \geq 0$ where $λ$ and $k$ are the same for all $i$.**
+
+**(a) By considering normal p.d.f., show that  $k = \sqrt{4 \lambda/\pi}.$**
+
+*solution (a):*
+
+$$f(t) = \frac{1}{\sigma\sqrt{2\pi}}\exp\{-\frac{(x - \mu)^2}{2\sigma^2}\} = ke^{-\lambda t^2}$$
+$k = \frac{1}{\sigma\sqrt{2\pi}}$ , $\lambda = \frac{1}{2\sigma^2}$ and $t = (x - \mu)$. Here we can find that
+
+$$
+k = \frac{1}{\sqrt{2\pi \sigma^2}} = \sqrt{\frac{\lambda}{\pi}}
+$$
+
+**(b) Obtain a maximum likelihood estimator for $\lambda$.**
+
+*solution (b):*
+
+Likelihood of the given expression is the following
+
+$$
+L(t) = \prod_{i=1}^{n}ke^{−\lambda t_i^2}
+$$
+The log likelihood function carries the same information of the likelihood function, but it is mor manageable so for simplicity we are going to use log likelihood.
+
+$$
+\ell(t) = n \log(k) -\lambda \sum_{i=1}^{n}t_i^2 = n \log(\sqrt{\lambda/ \pi} ) -\lambda \sum_{i=1}^{n}t_i^2 
+$$
+To find maximum likelihood estimator of $\lambda$ we need to derivate the log likelihood wit respect to $\lambda$ and find the $\lambda$ by setting equation zero.
+
+$$
+\frac{d\ell}{d\lambda} = \frac{n}{2\lambda}-\sum_{i=1}^{n}t_i^2 \\
+\lambda = \frac{n}{2\sum_{i=1}^{n}t_i^2}
+$$
+
+
+**(c) Given observation of $T_i$ (in days) of 243, 14, 121, 63, 45, 407 and 34  use a generalised likelihood ratio test to
+test $H_0 : \lambda = 10^{-4}$ against the alternative of no restriction on $\lambda$ at the $5%$ significance level. Note that if $V \sim X_1^2$ then $Pr[V \leq 3.841] = 0.95$.**
+
+*solution (c):*
+
+Likelihood test statistic is given by $W(\lambda_0) = 2(\ell(\hat{\lambda})-\ell(\lambda_0))$
+
+```{r echo=TRUE,warning=FALSE}
+log_lik_aircraft <- function(data,lambda){
+  length(data) * log(sqrt(lambda/pi)) - lambda * sum(data^2)
+}
+
+data <-  c(243, 14, 121, 63, 45, 407 ,34)
+mle <- length(data) / (2 * sum(data^2))
+cat("Maximum likelihood estimation for lambda:",mle)
+
+lambda_0 <- log_lik_aircraft(data,10^-4)
+lambda_0
+# since there is no restriction on lambda mle is chosen
+lambda_mle <- log_lik_aircraft(data,mle)
+
+lrt <- 2 * (lambda_mle - lambda_0)
+# to find p-value by using Pr(W >= w_obs)
+cat("p-value for test is:",pchisq(lrt,df=1,lower.tail = FALSE))
+
+```
+We have very small p-value, which indicates there is strong evidence against the null hypothesis.
+
+## Bayesian {.tabset}
+
+### BC 2.5
