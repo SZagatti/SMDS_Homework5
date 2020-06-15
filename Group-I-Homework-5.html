@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 <meta name="author" content="Group I: Demirbilek, Taroni, Zagatti" />
@@ -269,7 +269,6 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -331,6 +330,7 @@ summary {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -342,18 +342,6 @@ summary {
   display: none;
 }
 </style>
-
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
 
 <!-- code folding -->
 
@@ -411,6 +399,39 @@ anova(roller.lm , roller.lm2)</code></pre>
 <h2>CS</h2>
 <div id="exercise-3.2" class="section level3">
 <h3>Exercise 3.2</h3>
+<p><strong>Rewrite the following to eliminate the loops, first using <code>apply</code> and then using <code>rowSums</code>:</strong></p>
+<pre class="r"><code>X &lt;- matrix(runif(100000),1000,100); 
+z &lt;- rep(0,1000) 
+for (i in 1:1000) {
+for (j in 1:100) {z[i] &lt;- z[i] + X[i,j]} }</code></pre>
+<p>Confirm that all three versions give the same answers, but that your rewrites are much faster than the original. (<code>system.time</code> is a useful function.)</p>
+<p><em>solution :</em> In order to test how fast each version is we use the function <code>system.time</code> that determines how much real and CPU time (in seconds) the currently running R process takes to execute.</p>
+<p>In order to check that all three processes provided the same results we use the function <code>identical</code> that returns a logical value <code>TRUE</code> if the two arguments are exactly the same</p>
+<pre class="r"><code># Definition of the used variables
+X &lt;- matrix(runif(100000),1000,100)
+z &lt;- rep(0,1000)
+
+# Time Evaluation for the first version
+system.time( for (i in 1:1000) {
+for (j in 1:100) {
+z[i] &lt;- z[i]+X[i,j]  }})</code></pre>
+<pre><code>##    user  system elapsed 
+##   0.021   0.001   0.021</code></pre>
+<pre class="r"><code># Time evaluation of the second version (apply function)
+system.time(z1 &lt;- apply(X, 1, sum))</code></pre>
+<pre><code>##    user  system elapsed 
+##   0.004   0.001   0.004</code></pre>
+<pre class="r"><code># Check between the first and second result
+identical(z,z1)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="r"><code># Time evaluation of the third version (rowSums function)
+system.time(z2 &lt;- rowSums(X))</code></pre>
+<pre><code>##    user  system elapsed 
+##   0.001   0.000   0.001</code></pre>
+<pre class="r"><code># Check between the first and third result
+identical(z,z2)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<p>From the results of the checks obtained with <code>identical</code> we see that both <code>apply</code> and <code>rowSums</code> provide the same result al the first version proprosed. Comparing the results of <code>system.time</code> it is clear that the two solutions proposed are much faster then the first one, in particular <code>rowSums</code> provides to be the most efficient.</p>
 </div>
 <div id="exercise-4.4" class="section level3">
 <h3>Exercise 4.4</h3>
@@ -462,6 +483,48 @@ cat(&quot;p-value for test is:&quot;,pchisq(lrt,df=1,lower.tail = FALSE))</code>
 <h2>Bayesian</h2>
 <div id="bc-2.5" class="section level3">
 <h3>BC 2.5</h3>
+<p><strong>Suppose you are interested in estimating the average total snowfall per year <span class="math inline">\(\mu\)</span> (in inches) for a large city on the East Coast of the United States. Assume individual yearly snow totals <span class="math inline">\(y_1,\dots, y_n\)</span> are collected from a population that is assumed to be normally distributed with mean <span class="math inline">\(\mu\)</span> and known standard deviation <span class="math inline">\(\sigma = 10\)</span> inches.</strong></p>
+<p><strong>(a) Before collecting data, suppose you believe that the mean snowfall <span class="math inline">\(\mu\)</span> can be the values 20, 30, 40, 50, 60, and 70 inches with the following probabilities: 0.1, 0.15, 0.25, 0.25, 0.15, 0.1 respectively. Place the values of <span class="math inline">\(\mu\)</span> in the vector <code>mu</code> and the associated prior probabilities in the vector <code>prior</code>.</strong></p>
+<p><strong>(b) Suppose you observe the yearly snowfall totals 38.6, 42.4, 57.5, 40.5, 51.7, 67.1, 33.4, 60.9, 64.1, 40.1, 40.7, and 6.4 inches. Enter these data into a vector <code>y</code> and compute the sample mean <code>ybar</code>.</strong></p>
+<p><strong>(c) In this problem, the likelihood function is given by</strong></p>
+<p><span class="math display">\[L(\mu) \propto \exp \biggl(-\frac{n}{2\sigma^2}(\mu-\bar{y})^2\biggr)\]</span> <strong>where <span class="math inline">\(\bar{y}\)</span> is the sample mean. Compute the likelihood on the list of values in <code>mu</code> and place the likelihood values in the vector <code>like</code>.</strong></p>
+<p><strong>(d) One can compute the posterior probabilities for <span class="math inline">\(\mu\)</span> using the formula</strong></p>
+<p><span class="math display">\[ post=prior*like/sum(prior*like)\]</span> <strong>Compute the posterior probabilities of <span class="math inline">\(\mu\)</span> for this example.</strong></p>
+<p><strong>(e) Using the function <code>discint</code>, find an 80% probability interval for <span class="math inline">\(\mu\)</span></strong></p>
+<p><em>solution:</em></p>
+<pre class="r"><code>library('LearnBayes')
+# main data
+mu &lt;- c(20,30,40,50,60,70)
+mu &lt;- array(mu)
+prior &lt;- c(0.1,0.15,0.25,0.25,0.15,0.1)
+prior &lt;- array(prior)
+y &lt;- c(38.6, 42.4, 57.5, 40.5, 51.7, 67.1, 33.4, 60.9, 64.1, 40.1, 6.4)
+y &lt;- array(y)
+n &lt;- dim(y)
+sigma &lt;- 10
+ybar &lt;- mean(y)
+# likelihood
+like &lt;- exp(- n/(2*sigma^2)*(mu-ybar)^2)
+# posterior
+post &lt;- prior*like/sum(prior*like)
+# Build the discrete probability distribution
+probdist &lt;- cbind(mu,post)
+print(probdist)</code></pre>
+<pre><code>##      mu         post
+## [1,] 20 1.264348e-16
+## [2,] 30 1.468396e-06
+## [3,] 40 3.164740e-01
+## [4,] 50 6.835098e-01
+## [5,] 60 1.479324e-05
+## [6,] 70 5.941558e-15</code></pre>
+<pre class="r"><code># Compute the 80% probability interval for mu
+discint(probdist, 0.8)</code></pre>
+<pre><code>## $prob
+## [1] 0.9999837
+## 
+## $set
+## [1] 40 50</code></pre>
+<p><code>set</code> is the set of values of the probability interval and <code>prob</code> is the probability content of the interval.</p>
 </div>
 </div>
 </div>
@@ -483,6 +546,23 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
