@@ -71,13 +71,18 @@ These two models differ only in the use of `weight^2`. So ANOVA will test whethe
 
 **(a) By considering normal p.d.f., show that  $k = \sqrt{4 \lambda/\pi}.$**
 
+
 *solution (a):*
 
-$$f(t) = \frac{1}{\sigma\sqrt{2\pi}}\exp\{-\frac{(x - \mu)^2}{2\sigma^2}\} = ke^{-\lambda t^2}$$
-$k = \frac{1}{\sigma\sqrt{2\pi}}$ , $\lambda = \frac{1}{2\sigma^2}$ and $t = (x - \mu)$. Here we can find that
+$t \geq 0$ and $t = (x - \mu)$ so $x \geq \mu$. Since we consider only positive (right side) of normal p.d.f, we need to multiply it with by 2 to match the p.d.f $ke^{-\lambda t^2}$. So after this process we have:
+
+$$f(t) = \frac{2}{\sigma\sqrt{2\pi}}\exp\{-\frac{(x - \mu)^2}{2\sigma^2}\} = ke^{-\lambda t^2}$$
+
+
+$k = \frac{2}{\sigma\sqrt{2\pi}}$ , $\lambda = \frac{1}{2\sigma^2}$. Here we can find that
 
 $$
-k = \frac{1}{\sqrt{2\pi \sigma^2}} = \sqrt{\frac{\lambda}{\pi}}
+k = \frac{2}{\sqrt{2\pi \sigma^2}} = \sqrt{\frac{4}{2\pi \sigma^2}} = \sqrt{\frac{4\lambda}{\pi}}
 $$
 
 **(b) Obtain a maximum likelihood estimator for $\lambda$.**
@@ -92,7 +97,7 @@ $$
 The log likelihood function carries the same information of the likelihood function, but it is mor manageable so for simplicity we are going to use log likelihood.
 
 $$
-\ell(t) = n \log(k) -\lambda \sum_{i=1}^{n}t_i^2 = n \log(\sqrt{\lambda/ \pi} ) -\lambda \sum_{i=1}^{n}t_i^2 
+\ell(t) = n \log(k) -\lambda \sum_{i=1}^{n}t_i^2 = n \log(\sqrt{4\lambda/ \pi} ) -\lambda \sum_{i=1}^{n}t_i^2 
 $$
 To find maximum likelihood estimator of $\lambda$ we need to derivate the log likelihood wit respect to $\lambda$ and find the $\lambda$ by setting equation zero.
 
@@ -111,7 +116,7 @@ Likelihood test statistic is given by $W(\lambda_0) = 2(\ell(\hat{\lambda})-\ell
 
 ```{r echo=TRUE,warning=FALSE}
 log_lik_aircraft <- function(data,lambda){
-  length(data) * log(sqrt(lambda/pi)) - lambda * sum(data^2)
+  length(data) * log(sqrt(4*lambda/pi)) - lambda * sum(data^2)
 }
 
 data <-  c(243, 14, 121, 63, 45, 407 ,34)
@@ -119,7 +124,6 @@ mle <- length(data) / (2 * sum(data^2))
 cat("Maximum likelihood estimation for lambda:",mle)
 
 lambda_0 <- log_lik_aircraft(data,10^-4)
-lambda_0
 # since there is no restriction on lambda mle is chosen
 lambda_mle <- log_lik_aircraft(data,mle)
 

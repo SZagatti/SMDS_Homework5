@@ -417,9 +417,11 @@ anova(roller.lm , roller.lm2)</code></pre>
 <p><strong>Suppose that you have <span class="math inline">\(n\)</span> independent measurements of times between major aircraft disasters, <span class="math inline">\(t_i\)</span> , and believe that the probability density function for the <span class="math inline">\(t_i\)</span>’s is of the form: <span class="math inline">\(f(t) = ke^{−\lambda t^2}\)</span> <span class="math inline">\(t \geq 0\)</span> where <span class="math inline">\(λ\)</span> and <span class="math inline">\(k\)</span> are the same for all <span class="math inline">\(i\)</span>.</strong></p>
 <p><strong>(a) By considering normal p.d.f., show that <span class="math inline">\(k = \sqrt{4 \lambda/\pi}.\)</span></strong></p>
 <p><em>solution (a):</em></p>
-<p><span class="math display">\[f(t) = \frac{1}{\sigma\sqrt{2\pi}}\exp\{-\frac{(x - \mu)^2}{2\sigma^2}\} = ke^{-\lambda t^2}\]</span> <span class="math inline">\(k = \frac{1}{\sigma\sqrt{2\pi}}\)</span> , <span class="math inline">\(\lambda = \frac{1}{2\sigma^2}\)</span> and <span class="math inline">\(t = (x - \mu)\)</span>. Here we can find that</p>
+<p><span class="math inline">\(t \geq 0\)</span> and <span class="math inline">\(t = (x - \mu)\)</span> so <span class="math inline">\(x \geq \mu\)</span>. Since we consider only positive (right side) of normal p.d.f, we need to multiply it with by 2 to match the p.d.f <span class="math inline">\(ke^{-\lambda t^2}\)</span>. So after this process we have:</p>
+<p><span class="math display">\[f(t) = \frac{2}{\sigma\sqrt{2\pi}}\exp\{-\frac{(x - \mu)^2}{2\sigma^2}\} = ke^{-\lambda t^2}\]</span></p>
+<p><span class="math inline">\(k = \frac{2}{\sigma\sqrt{2\pi}}\)</span> , <span class="math inline">\(\lambda = \frac{1}{2\sigma^2}\)</span>. Here we can find that</p>
 <p><span class="math display">\[
-k = \frac{1}{\sqrt{2\pi \sigma^2}} = \sqrt{\frac{\lambda}{\pi}}
+k = \frac{2}{\sqrt{2\pi \sigma^2}} = \sqrt{\frac{4}{2\pi \sigma^2}} = \sqrt{\frac{4\lambda}{\pi}}
 \]</span></p>
 <p><strong>(b) Obtain a maximum likelihood estimator for <span class="math inline">\(\lambda\)</span>.</strong></p>
 <p><em>solution (b):</em></p>
@@ -428,7 +430,7 @@ k = \frac{1}{\sqrt{2\pi \sigma^2}} = \sqrt{\frac{\lambda}{\pi}}
 L(t) = \prod_{i=1}^{n}ke^{−\lambda t_i^2}
 \]</span> The log likelihood function carries the same information of the likelihood function, but it is mor manageable so for simplicity we are going to use log likelihood.</p>
 <p><span class="math display">\[
-\ell(t) = n \log(k) -\lambda \sum_{i=1}^{n}t_i^2 = n \log(\sqrt{\lambda/ \pi} ) -\lambda \sum_{i=1}^{n}t_i^2 
+\ell(t) = n \log(k) -\lambda \sum_{i=1}^{n}t_i^2 = n \log(\sqrt{4\lambda/ \pi} ) -\lambda \sum_{i=1}^{n}t_i^2 
 \]</span> To find maximum likelihood estimator of <span class="math inline">\(\lambda\)</span> we need to derivate the log likelihood wit respect to <span class="math inline">\(\lambda\)</span> and find the <span class="math inline">\(\lambda\)</span> by setting equation zero.</p>
 <p><span class="math display">\[
 \frac{d\ell}{d\lambda} = \frac{n}{2\lambda}-\sum_{i=1}^{n}t_i^2 \\
@@ -438,7 +440,7 @@ L(t) = \prod_{i=1}^{n}ke^{−\lambda t_i^2}
 <p><em>solution (c):</em></p>
 <p>Likelihood test statistic is given by <span class="math inline">\(W(\lambda_0) = 2(\ell(\hat{\lambda})-\ell(\lambda_0))\)</span></p>
 <pre class="r"><code>log_lik_aircraft &lt;- function(data,lambda){
-  length(data) * log(sqrt(lambda/pi)) - lambda * sum(data^2)
+  length(data) * log(sqrt(4*lambda/pi)) - lambda * sum(data^2)
 }
 
 data &lt;-  c(243, 14, 121, 63, 45, 407 ,34)
@@ -446,9 +448,7 @@ mle &lt;- length(data) / (2 * sum(data^2))
 cat(&quot;Maximum likelihood estimation for lambda:&quot;,mle)</code></pre>
 <pre><code>## Maximum likelihood estimation for lambda: 1.418813e-05</code></pre>
 <pre class="r"><code>lambda_0 &lt;- log_lik_aircraft(data,10^-4)
-lambda_0</code></pre>
-<pre><code>## [1] -60.91125</code></pre>
-<pre class="r"><code># since there is no restriction on lambda mle is chosen
+# since there is no restriction on lambda mle is chosen
 lambda_mle &lt;- log_lik_aircraft(data,mle)
 
 lrt &lt;- 2 * (lambda_mle - lambda_0)
