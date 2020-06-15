@@ -48,7 +48,7 @@ Is there any justification for including the squared term?**
 
 *solution :* 
 
-```{r basic 1, echo=TRUE,warning=FALSE}
+```{r, echo=TRUE,warning=FALSE}
 library(DAAG)
 #help(roller)
 roller.lm <- lm(depression ~ weight, data = roller)
@@ -62,8 +62,51 @@ These two models differ only in the use of `weight^2`. So ANOVA will test whethe
 
 
 ### Exercise 3.2
+**Rewrite the following to eliminate the loops, first using `apply` and then
+using `rowSums`:**
+
+```{r, echo=TRUE,warning=FALSE}
+X <- matrix(runif(100000),1000,100); 
+z <- rep(0,1000) 
+for (i in 1:1000) {
+for (j in 1:100) {z[i] <- z[i] + X[i,j]} }
+
+```
+
+Confirm that all three versions give the same answers, but that your rewrites
+are much faster than the original. (`system.time` is a useful function.)
 
 
+*solution :* 
+In order to test how fast each version is we use the function `system.time` that determines how much real and CPU time (in seconds) the currently running R process takes to execute.
+
+In order to check that all three processes provided the same results we use the function `identical` that returns a logical value `TRUE` if the two arguments are exactly the same
+
+```{r, echo=TRUE,warning=FALSE}
+# Definition of the used variables
+X <- matrix(runif(100000),1000,100)
+z <- rep(0,1000)
+
+# Time Evaluation for the first version
+system.time( for (i in 1:1000) {
+for (j in 1:100) {
+z[i] <- z[i]+X[i,j]  }})
+
+# Time evaluation of the second version (apply function)
+system.time(z1 <- apply(X, 1, sum))
+
+# Check between the first and second result
+identical(z,z1)
+
+# Time evaluation of the third version (rowSums function)
+system.time(z2 <- rowSums(X))
+
+# Check between the first and third result
+identical(z,z2)
+
+```
+
+From the results of the checks obtained with `identical` we see that both `apply` and `rowSums` provide the same result al the first version proprosed. Comparing the results of `system.time` it is clear that the two solutions proposed are much faster then the first one, in particular `rowSums` provides to be the most efficient.
 
 ### Exercise 4.4
 
@@ -133,3 +176,49 @@ We have very small p-value, which indicates there is strong evidence against the
 ## Bayesian {.tabset}
 
 ### BC 2.5
+
+**Suppose you are interested in estimating the average total snowfall per year $\mu$ (in inches) for a large city on the East Coast of the United States. Assume individual yearly snow totals $y_1,\dots, y_n$ are collected from a population that is assumed to be normally distributed with mean $\mu$ and known standard deviation $\sigma = 10$ inches.**
+
+**(a) Before collecting data, suppose you believe that the mean snowfall $\mu$ can be the values 20, 30, 40, 50, 60, and 70 inches with the following probabilities: 0.1, 0.15, 0.25, 0.25, 0.15, 0.1 respectively. Place the values of $\mu$ in the vector `mu` and the associated prior probabilities in the vector `prior`.**
+
+**(b) Suppose you observe the yearly snowfall totals 38.6, 42.4, 57.5, 40.5, 51.7, 67.1, 33.4, 60.9, 64.1, 40.1, 40.7, and 6.4 inches. Enter these data into a vector `y` and compute the sample mean `ybar`.**
+
+**(c) In this problem, the likelihood function is given by** 
+
+$$L(\mu) \propto \exp \biggl(-\frac{n}{2\sigma^2}(\mu-\bar{y})^2\biggr)$$
+**where $\bar{y}$ is the sample mean. Compute the likelihood on the list of values in `mu` and place the likelihood values in the vector `like`.** 
+
+**(d) One can compute the posterior probabilities for $\mu$ using the formula**
+
+$$ post=prior*like/sum(prior*like)$$
+**Compute the posterior probabilities of $\mu$ for this example.** 
+
+**(e) Using the function `discint`, find an 80\% probability interval for $\mu$**
+
+*solution:*
+
+```{r echo=TRUE,warning=FALSE}
+library('LearnBayes')
+# main data
+mu <- c(20,30,40,50,60,70)
+mu <- array(mu)
+prior <- c(0.1,0.15,0.25,0.25,0.15,0.1)
+prior <- array(prior)
+y <- c(38.6, 42.4, 57.5, 40.5, 51.7, 67.1, 33.4, 60.9, 64.1, 40.1, 6.4)
+y <- array(y)
+n <- dim(y)
+sigma <- 10
+ybar <- mean(y)
+# likelihood
+like <- exp(- n/(2*sigma^2)*(mu-ybar)^2)
+# posterior
+post <- prior*like/sum(prior*like)
+# Build the discrete probability distribution
+probdist <- cbind(mu,post)
+print(probdist)
+# Compute the 80% probability interval for mu
+discint(probdist, 0.8)
+
+```
+
+`set` is the set of values of the probability interval and `prob` is the probability content of the interval.
