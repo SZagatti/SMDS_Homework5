@@ -56,7 +56,7 @@ roller.lm2 <- lm(depression ~ weight + I(weight^2), data = roller)
 anova(roller.lm , roller.lm2)
 
 ```
-These two models differ only in the use of `weight^2`. So ANOVA will test whether or not including this leads significant improvement. Adding this term spawned non-significant result (p=0.259). Thus we should reject second model, in other words adding `weight^2`didn't lead better result.
+These two models differ only in the use of `weight^2`. So ANOVA will test whether or not including this leads significant improvement. Adding this term spawned non-significant result (p=0.259). Thus adding `weight^2` didn't lead better result. In other words, second model didn't explain data well.
 
 ## CS {.tabset}
 
