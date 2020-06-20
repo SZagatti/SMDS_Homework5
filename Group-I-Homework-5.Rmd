@@ -73,8 +73,8 @@ for (j in 1:100) {z[i] <- z[i] + X[i,j]} }
 
 ```
 
-Confirm that all three versions give the same answers, but that your rewrites
-are much faster than the original. (`system.time` is a useful function.)
+**Confirm that all three versions give the same answers, but that your rewrites
+are much faster than the original. (`system.time` is a useful function.)**
 
 
 *solution :* 
@@ -137,7 +137,7 @@ Likelihood of the given expression is the following
 $$
 L(t) = \prod_{i=1}^{n}ke^{−\lambda t_i^2}
 $$
-The log likelihood function carries the same information of the likelihood function, but it is mor manageable so for simplicity we are going to use log likelihood.
+The log likelihood function carries the same information of the likelihood function, but it is more manageable so for simplicity we are going to use log likelihood.
 
 $$
 \ell(t) = n \log(k) -\lambda \sum_{i=1}^{n}t_i^2 = n \log(\sqrt{4\lambda/ \pi} ) -\lambda \sum_{i=1}^{n}t_i^2 
@@ -151,7 +151,7 @@ $$
 
 
 **(c) Given observation of $T_i$ (in days) of 243, 14, 121, 63, 45, 407 and 34  use a generalised likelihood ratio test to
-test $H_0 : \lambda = 10^{-4}$ against the alternative of no restriction on $\lambda$ at the $5%$ significance level. Note that if $V \sim X_1^2$ then $Pr[V \leq 3.841] = 0.95$.**
+test $H_0 : \lambda = 10^{-4}$ against the alternative of no restriction on $\lambda$ at the $5$% significance level. Note that if $V \sim X_1^2$ then $Pr[V \leq 3.841] = 0.95$.**
 
 *solution (c):*
 
