@@ -38,6 +38,71 @@ local({
 
 ### Exercise 4.21
 
+Suppose the mean reaction time to a particular stimulus has been estimated in several previous studies,and it appears to be approximately normally distributed with mean 0.35 seconds with standard deviation 0.1 seconds. On the basis of 10 new observations, the mean reaction time is estimated to be 0.45 seconds with an estimated standard deviation of 0.15 seconds. Based on the sample information, what is the maximum likelihood estimator for the true mean reaction time? What is the Bayes’ estimate of the mean reaction time?
+
+*solution :*
+
+We start by calculating the likelihood function for our sample, with $n=10$
+$$ 
+L(\mu;x)=\prod_{i=1}^n\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x_i-\mu)^2}{2\sigma^2}}=\frac{1}{(\sqrt{2\pi})^n\sigma^n}e^{-\sum_{i=1}^n\frac{(x_i-\mu)^2}{2\sigma^2}}
+$$
+If we take the logarithm we get
+$$
+\ell(\mu;x)=-n\ln(\sqrt{2\pi}\sigma)-\sum_{i=1}^n\frac{(x_i-\mu)^2}{2\sigma^2}
+$$
+The maximum likelihood estimate is found with
+$$
+\hat\mu=\underset{\mu\in\Theta}{\operatorname{argmax}\ell(\mu)}
+$$
+So we have to calculate the partial derivative of the log likelihood respect to $\mu$ and set it equal 0
+$$
+\frac{\partial}{\partial\mu}\ell(\mu;x)=\frac{1}{\sigma^2}\sum_{i=1}^n(x_i-\mu)=0 \\
+\sum_{i=1}^n(x_i-\mu)=0 \\
+\hat\mu=\frac{1}{n}\sum_{i=1}^nx_i
+$$
+Thus we see that our maximum likelihood estimator for the true mean reaction time is the sample mean.
+
+If we want to calculate the Bayes’ estimate of the mean reaction time we start by writing the posterior relation as a proportion, focusing only on what is function of $\mu$.
+$$
+\pi(\mu|x)\propto L(\mu;x)\pi_0(\mu) \\
+\pi(\mu|x)\propto e^{-\frac{1}{2\sigma^2}\sum_{i=1}^n(x_i-\mu)^2}e^{-\frac{1}{2{\sigma_0}^2}(\mu-\mu_0)^2} \\
+\pi(\mu|x)\propto e^{-\frac{1}{2\sigma^2}\sum_{i=1}^n(x_i^2+\mu^2-2x_i\mu)}e^{-\frac{1}{2{\sigma_0}^2}(\mu^2+{\mu_0}^2-2\mu\mu_0)} \\
+\pi(\mu|x)\propto e^{-\frac{1}{2\sigma^2}(\sum_{i=1}^nx_i^2+n\mu^2-2n\bar x\mu)}e^{-\frac{1}{2{\sigma_0}^2}(\mu^2+{\mu_0}^2-2\mu\mu_0)}
+$$
+We can get rid of the terms that don't depend on $\mu$
+$$
+\pi(\mu|x)\propto e^{-\frac{1}{2\sigma^2}(n\mu^2-2n\bar x\mu)}e^{-\frac{1}{2{\sigma_0}^2}(\mu^2-2\mu\mu_0)} \\
+$$
+Then we try to write everything as an exponential function of $\mu$.
+$$
+\pi(\mu|x)\propto e^{-\frac{1}{2}\Big[\frac{n}{\sigma^2}(\mu^2-2\bar x\mu)+\frac{1}{{\sigma_0}^2}(\mu^2-2\mu\mu_0)\Big]} \\
+\propto e^{-\frac{1}{2}\Big[\mu^2\Big(\frac{n}{\sigma^2}+\frac{1}{{\sigma_0}^2}\Big)-2\mu\Big(\frac{n}{\sigma^2}\bar x+\frac{1}{{\sigma_0}^2}\mu_0\Big)\Big]} \\
+\propto e^{-\frac{1}{2}\Big(\frac{n+\sigma^2/{\sigma_0}^2}{\sigma^2}\Big)\Big[\mu^2-2\mu\Big(\frac{n\bar x+\sigma^2/{\sigma_0}^2\mu_0}{n+\sigma^2/{\sigma_0}^2}\Big)\Big]}
+$$
+At this point we can add and subtract $\Big(\frac{n\bar x+\sigma^2/{\sigma_0}^2\mu_0}{n+\sigma^2/{\sigma_0}^2}\Big)^2$ inside square brackets and I can also get rid of the one with negative sign just because it doesn't depend on $\mu$.
+$$
+\pi(\mu|x)\propto e^{-\frac{1}{2}\Big(\frac{n+\sigma^2/{\sigma_0}^2}{\sigma^2}\Big)\Big[\mu^2-2\mu\Big(\frac{n\bar x+\sigma^2/{\sigma_0}^2\mu_0}{n+\sigma^2/{\sigma_0}^2}\Big)+\Big(\frac{n\bar x+\sigma^2/{\sigma_0}^2\mu_0}{n+\sigma^2/{\sigma_0}^2}\Big)^2\Big]}
+$$
+Finally we complete the square and we get the gaussian form:
+$$
+\pi(\mu|x)\propto e^{-\frac{1}{2}\Big(\frac{n+\sigma^2/{\sigma_0}^2}{\sigma^2}\Big)\Big(\mu-\frac{n\bar x+\sigma^2/{\sigma_0}^2\mu_0}{n+\sigma^2/{\sigma_0}^2}\Big)^2}
+$$
+Thus we can calculate the posterior estimate of the mean through the equation:
+$$
+\hat \mu = \frac{n\bar x+\sigma^2/{\sigma_0}^2\mu_0}{n+\sigma^2/{\sigma_0}^2}
+$$
+getting as result for the Bayes’ estimate of the mean reaction time
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+n <- 10
+xbar <- 0.45
+sigma <- 0.15
+mu0 <- 0.35
+sigma0 <- 0.1
+
+muhat <- (n*xbar + mu0*sigma**2/sigma0**2)/(n + sigma**2/sigma0**2) 
+
+print(muhat)
+```
 
 ### Exercise 7.2
 
