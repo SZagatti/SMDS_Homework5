@@ -121,7 +121,7 @@ roller.lm2 <- lm(depression ~ weight + I(weight^2), data = roller)
 anova(roller.lm , roller.lm2)
 
 ```
-These two models differ only in the use of `weight^2`. So ANOVA will test whether or not including this leads to a significant improvement. Adding this term spawned non-significant result (p=0.259). Thus adding `weight^2` didn't lead better result. In other words, second model didn't explain data well.
+These two models differ only in the use of `weight^2`. So ANOVA will test whether or not including this leads to a significant improvement. Adding this term spawned non-significant result (p=0.259), hhus adding `weight^2` didn't lead to a better result. In other words, the second model didn't explain the data well.
 
 ## CS {.tabset}
 
@@ -145,7 +145,7 @@ are much faster than the original. (`system.time` is a useful function.)**
 *solution :* 
 In order to test how fast each version is, we use the function `system.time` that determines how much real and CPU time (in seconds) the currently running R process takes to execute.
 
-In order to check that all three processes provided the same results we use the function `identical` that returns a logical value `TRUE` if the two arguments are exactly the same
+In order to check that all three processes provide the same results we use the function `identical` that returns a logical value `TRUE` if the two arguments are exactly the same.
 
 ```{r, echo=TRUE,warning=FALSE}
 # Definition of the used variables
@@ -172,7 +172,7 @@ identical(z,z2)
 ```
 
 
-From the results of the checks obtained with `identical` we see that both `apply` and `rowSums` provide the same result as the first version proprosed. Comparing the results of `system.time` it is clear that the two solutions proposed are much faster then the first one, in particular `rowSums` provides most efficient one.
+From the results of the checks obtained with `identical` we see that both `apply` and `rowSums` provide the same result as the first version proprosed. By comparing the results of `system.time` it is clear that the two solutions proposed are much faster then the first one, in particular `rowSums` results to be the most efficient one.
 
 
 ### Exercise 4.4
@@ -204,12 +204,12 @@ The likelihood of the given expression is the following
 $$
 L(t) = \prod_{i=1}^{n}ke^{−\lambda t_i^2}
 $$
-The log likelihood function carries the same information of the likelihood function, but it is more manageable so for simplicity we are going to use log likelihood.
+The log likelihood function carries the same information of the likelihood function, but it is more manageable, so for simplicity we are going to use the log likelihood.
 
 $$
 \ell(t) = n \log(k) -\lambda \sum_{i=1}^{n}t_i^2 = n \log(\sqrt{4\lambda/ \pi} ) -\lambda \sum_{i=1}^{n}t_i^2 
 $$
-To find maximum likelihood estimator of $\lambda$ we need to derivate the log likelihood with respect to $\lambda$ and find the $\lambda$ by setting the equation equal to zero.
+To find the maximum likelihood estimator of $\lambda$ we need to derivate the log likelihood with respect to $\lambda$ and find the $\lambda$ by setting the equation equal to zero.
 
 $$
 \frac{d\ell}{d\lambda} = \frac{n}{2\lambda}-\sum_{i=1}^{n}t_i^2 \\
@@ -222,7 +222,7 @@ test $H_0 : \lambda = 10^{-4}$ against the alternative of no restriction on $\la
 
 *solution (c):*
 
-Likelihood test statistic is given by $W(\lambda_0) = 2(\ell(\hat{\lambda})-\ell(\lambda_0))$
+The likelihood test statistic is given by $W(\lambda_0) = 2(\ell(\hat{\lambda})-\ell(\lambda_0))$
 
 ```{r echo=TRUE,warning=FALSE}
 log_lik_aircraft <- function(data,lambda){
@@ -242,7 +242,7 @@ lrt <- 2 * (lambda_mle - lambda_0)
 cat("p-value for test is:",pchisq(lrt,df=1,lower.tail = FALSE))
 
 ```
-We have a very small p-value, which indicates there is strong evidence against the null hypothesis.
+We have a very small p-value, which indicates that there is strong evidence against the null hypothesis.
 
 ## Bayesian {.tabset}
 
