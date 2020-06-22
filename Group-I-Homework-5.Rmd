@@ -38,7 +38,7 @@ local({
 
 ### Exercise 4.21
 
-Suppose the mean reaction time to a particular stimulus has been estimated in several previous studies,and it appears to be approximately normally distributed with mean 0.35 seconds with standard deviation 0.1 seconds. On the basis of 10 new observations, the mean reaction time is estimated to be 0.45 seconds with an estimated standard deviation of 0.15 seconds. Based on the sample information, what is the maximum likelihood estimator for the true mean reaction time? What is the Bayes’ estimate of the mean reaction time?
+**Suppose the mean reaction time to a particular stimulus has been estimated in several previous studies,and it appears to be approximately normally distributed with mean 0.35 seconds with standard deviation 0.1 seconds. On the basis of 10 new observations, the mean reaction time is estimated to be 0.45 seconds with an estimated standard deviation of 0.15 seconds. Based on the sample information, what is the maximum likelihood estimator for the true mean reaction time? What is the Bayes’ estimate of the mean reaction time?**
 
 *solution :*
 
@@ -171,7 +171,9 @@ identical(z,z2)
 
 ```
 
-From the results of the checks obtained with `identical` we see that both `apply` and `rowSums` provide the same result proposed by the first version of the code. Comparing the results of `system.time` it is clear that the two new solutions implemented are much faster than the first one, in particular `rowSums` provides to be the most efficient.
+
+From the results of the checks obtained with `identical` we see that both `apply` and `rowSums` provide the same result as the first version proprosed. Comparing the results of `system.time` it is clear that the two solutions proposed are much faster then the first one, in particular `rowSums` provides most efficient one.
+
 
 ### Exercise 4.4
 

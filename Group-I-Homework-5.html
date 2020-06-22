@@ -375,7 +375,9 @@ summary {
 <h2>DAAG</h2>
 <div id="exercise-4.21" class="section level3">
 <h3>Exercise 4.21</h3>
-<p>Suppose the mean reaction time to a particular stimulus has been estimated in several previous studies,and it appears to be approximately normally distributed with mean 0.35 seconds with standard deviation 0.1 seconds. On the basis of 10 new observations, the mean reaction time is estimated to be 0.45 seconds with an estimated standard deviation of 0.15 seconds. Based on the sample information, what is the maximum likelihood estimator for the true mean reaction time? What is the Bayes’ estimate of the mean reaction time?</p>
+
+<p><strong>Suppose the mean reaction time to a particular stimulus has been estimated in several previous studies,and it appears to be approximately normally distributed with mean 0.35 seconds with standard deviation 0.1 seconds. On the basis of 10 new observations, the mean reaction time is estimated to be 0.45 seconds with an estimated standard deviation of 0.15 seconds. Based on the sample information, what is the maximum likelihood estimator for the true mean reaction time? What is the Bayes’ estimate of the mean reaction time?</strong></p>
+
 <p><em>solution :</em></p>
 <p>We start by calculating the likelihood function for our sample, with <span class="math inline">\(n=10\)</span> <span class="math display">\[ 
 L(\mu;x)=\prod_{i=1}^n\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x_i-\mu)^2}{2\sigma^2}}=\frac{1}{(\sqrt{2\pi})^n\sigma^n}e^{-\sum_{i=1}^n\frac{(x_i-\mu)^2}{2\sigma^2}}
@@ -383,7 +385,9 @@ L(\mu;x)=\prod_{i=1}^n\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x_i-\mu)^2}{2\sigma^
 \ell(\mu;x)=-n\ln(\sqrt{2\pi}\sigma)-\sum_{i=1}^n\frac{(x_i-\mu)^2}{2\sigma^2}
 \]</span> The maximum likelihood estimate is found with <span class="math display">\[
 \hat\mu=\underset{\mu\in\Theta}{\operatorname{argmax}\ell(\mu)}
-\]</span> So we have to calculate the partial derivative of the log likelihood with respect to <span class="math inline">\(\mu\)</span> and set it equal 0 <span class="math display">\[
+
+\]</span> So we have to calculate the partial derivative of the log likelihood respect to <span class="math inline">\(\mu\)</span> and set it equal 0 <span class="math display">\[
+
 \frac{\partial}{\partial\mu}\ell(\mu;x)=\frac{1}{\sigma^2}\sum_{i=1}^n(x_i-\mu)=0 \\
 \sum_{i=1}^n(x_i-\mu)=0 \\
 \hat\mu=\frac{1}{n}\sum_{i=1}^nx_i
@@ -433,7 +437,9 @@ anova(roller.lm , roller.lm2)</code></pre>
 ##   Res.Df    RSS Df Sum of Sq      F Pr(&gt;F)
 ## 1      8 362.93                           
 ## 2      7 298.58  1    64.359 1.5089  0.259</code></pre>
-<p>These two models differ only in the use of <code>weight^2</code>. So ANOVA will test whether or not including this leads to a significant improvement. Adding this term spawned non-significant result (p=0.259). Thus adding <code>weight^2</code> didn’t lead better result. In other words, second model didn’t explain data well.</p>
+
+<p>These two models differ only in the use of <code>weight^2</code>. So ANOVA will test whether or not including this leads significant improvement. Adding this term spawned non-significant result (p=0.259). Thus adding <code>weight^2</code> didn’t lead better result. In other words, second model didn’t explain data well.</p>
+
 </div>
 </div>
 <div id="cs" class="section level2 tabset">
@@ -457,22 +463,27 @@ system.time( for (i in 1:1000) {
 for (j in 1:100) {
 z[i] &lt;- z[i]+X[i,j]  }})</code></pre>
 <pre><code>##    user  system elapsed 
-##    0.05    0.00    0.04</code></pre>
+
+
+##   0.013   0.001   0.014</code></pre>
 <pre class="r"><code># Time evaluation of the second version (apply function)
 system.time(z1 &lt;- apply(X, 1, sum))</code></pre>
 <pre><code>##    user  system elapsed 
-##    0.02    0.00    0.01</code></pre>
+##   0.002   0.000   0.003</code></pre>
+
 <pre class="r"><code># Check between the first and second result
 identical(z,z1)</code></pre>
 <pre><code>## [1] TRUE</code></pre>
 <pre class="r"><code># Time evaluation of the third version (rowSums function)
 system.time(z2 &lt;- rowSums(X))</code></pre>
 <pre><code>##    user  system elapsed 
-##       0       0       0</code></pre>
+
+##   0.000   0.000   0.001</code></pre>
 <pre class="r"><code># Check between the first and third result
 identical(z,z2)</code></pre>
 <pre><code>## [1] TRUE</code></pre>
-<p>From the results of the checks obtained with <code>identical</code> we see that both <code>apply</code> and <code>rowSums</code> provide the same result proposed by the first version of the code. Comparing the results of <code>system.time</code> it is clear that the two new solutions implemented are much faster than the first one, in particular <code>rowSums</code> provides to be the most efficient.</p>
+<p>From the results of the checks obtained with <code>identical</code> we see that both <code>apply</code> and <code>rowSums</code> provide the same result as the first version proprosed. Comparing the results of <code>system.time</code> it is clear that the two solutions proposed are much faster then the first one, in particular <code>rowSums</code> provides most efficient one.</p>
+
 </div>
 <div id="exercise-4.4" class="section level3">
 <h3>Exercise 4.4</h3>
