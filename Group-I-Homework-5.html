@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 <meta name="author" content="Group I: Demirbilek, Taroni, Zagatti" />
@@ -269,7 +269,6 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -331,6 +330,7 @@ summary {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -342,18 +342,6 @@ summary {
   display: none;
 }
 </style>
-
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
 
 <!-- code folding -->
 
@@ -387,6 +375,47 @@ $(document).ready(function () {
 <h2>DAAG</h2>
 <div id="exercise-4.21" class="section level3">
 <h3>Exercise 4.21</h3>
+<p>Suppose the mean reaction time to a particular stimulus has been estimated in several previous studies,and it appears to be approximately normally distributed with mean 0.35 seconds with standard deviation 0.1 seconds. On the basis of 10 new observations, the mean reaction time is estimated to be 0.45 seconds with an estimated standard deviation of 0.15 seconds. Based on the sample information, what is the maximum likelihood estimator for the true mean reaction time? What is the Bayes’ estimate of the mean reaction time?</p>
+<p><em>solution :</em></p>
+<p>We start by calculating the likelihood function for our sample, with <span class="math inline">\(n=10\)</span> <span class="math display">\[ 
+L(\mu;x)=\prod_{i=1}^n\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x_i-\mu)^2}{2\sigma^2}}=\frac{1}{(\sqrt{2\pi})^n\sigma^n}e^{-\sum_{i=1}^n\frac{(x_i-\mu)^2}{2\sigma^2}}
+\]</span> If we take the logarithm we get <span class="math display">\[
+\ell(\mu;x)=-n\ln(\sqrt{2\pi}\sigma)-\sum_{i=1}^n\frac{(x_i-\mu)^2}{2\sigma^2}
+\]</span> The maximum likelihood estimate is found with <span class="math display">\[
+\hat\mu=\underset{\mu\in\Theta}{\operatorname{argmax}\ell(\mu)}
+\]</span> So we have to calculate the partial derivative of the log likelihood respect to <span class="math inline">\(\mu\)</span> and set it equal 0 <span class="math display">\[
+\frac{\partial}{\partial\mu}\ell(\mu;x)=\frac{1}{\sigma^2}\sum_{i=1}^n(x_i-\mu)=0 \\
+\sum_{i=1}^n(x_i-\mu)=0 \\
+\hat\mu=\frac{1}{n}\sum_{i=1}^nx_i
+\]</span> Thus we see that our maximum likelihood estimator for the true mean reaction time is the sample mean.</p>
+<p>If we want to calculate the Bayes’ estimate of the mean reaction time we start by writing the posterior relation as a proportion, focusing only on what is function of <span class="math inline">\(\mu\)</span>. <span class="math display">\[
+\pi(\mu|x)\propto L(\mu;x)\pi_0(\mu) \\
+\pi(\mu|x)\propto e^{-\frac{1}{2\sigma^2}\sum_{i=1}^n(x_i-\mu)^2}e^{-\frac{1}{2{\sigma_0}^2}(\mu-\mu_0)^2} \\
+\pi(\mu|x)\propto e^{-\frac{1}{2\sigma^2}\sum_{i=1}^n(x_i^2+\mu^2-2x_i\mu)}e^{-\frac{1}{2{\sigma_0}^2}(\mu^2+{\mu_0}^2-2\mu\mu_0)} \\
+\pi(\mu|x)\propto e^{-\frac{1}{2\sigma^2}(\sum_{i=1}^nx_i^2+n\mu^2-2n\bar x\mu)}e^{-\frac{1}{2{\sigma_0}^2}(\mu^2+{\mu_0}^2-2\mu\mu_0)}
+\]</span> We can get rid of the terms that don’t depend on <span class="math inline">\(\mu\)</span> <span class="math display">\[
+\pi(\mu|x)\propto e^{-\frac{1}{2\sigma^2}(n\mu^2-2n\bar x\mu)}e^{-\frac{1}{2{\sigma_0}^2}(\mu^2-2\mu\mu_0)} \\
+\]</span> Then we try to write everything as an exponential function of <span class="math inline">\(\mu\)</span>. <span class="math display">\[
+\pi(\mu|x)\propto e^{-\frac{1}{2}\Big[\frac{n}{\sigma^2}(\mu^2-2\bar x\mu)+\frac{1}{{\sigma_0}^2}(\mu^2-2\mu\mu_0)\Big]} \\
+\propto e^{-\frac{1}{2}\Big[\mu^2\Big(\frac{n}{\sigma^2}+\frac{1}{{\sigma_0}^2}\Big)-2\mu\Big(\frac{n}{\sigma^2}\bar x+\frac{1}{{\sigma_0}^2}\mu_0\Big)\Big]} \\
+\propto e^{-\frac{1}{2}\Big(\frac{n+\sigma^2/{\sigma_0}^2}{\sigma^2}\Big)\Big[\mu^2-2\mu\Big(\frac{n\bar x+\sigma^2/{\sigma_0}^2\mu_0}{n+\sigma^2/{\sigma_0}^2}\Big)\Big]}
+\]</span> At this point we can add and subtract <span class="math inline">\(\Big(\frac{n\bar x+\sigma^2/{\sigma_0}^2\mu_0}{n+\sigma^2/{\sigma_0}^2}\Big)^2\)</span> inside square brackets and I can also get rid of the one with negative sign just because it doesn’t depend on <span class="math inline">\(\mu\)</span>. <span class="math display">\[
+\pi(\mu|x)\propto e^{-\frac{1}{2}\Big(\frac{n+\sigma^2/{\sigma_0}^2}{\sigma^2}\Big)\Big[\mu^2-2\mu\Big(\frac{n\bar x+\sigma^2/{\sigma_0}^2\mu_0}{n+\sigma^2/{\sigma_0}^2}\Big)+\Big(\frac{n\bar x+\sigma^2/{\sigma_0}^2\mu_0}{n+\sigma^2/{\sigma_0}^2}\Big)^2\Big]}
+\]</span> Finally we complete the square and we get the gaussian form: <span class="math display">\[
+\pi(\mu|x)\propto e^{-\frac{1}{2}\Big(\frac{n+\sigma^2/{\sigma_0}^2}{\sigma^2}\Big)\Big(\mu-\frac{n\bar x+\sigma^2/{\sigma_0}^2\mu_0}{n+\sigma^2/{\sigma_0}^2}\Big)^2}
+\]</span> Thus we can calculate the posterior estimate of the mean through the equation: <span class="math display">\[
+\hat \mu = \frac{n\bar x+\sigma^2/{\sigma_0}^2\mu_0}{n+\sigma^2/{\sigma_0}^2}
+\]</span> getting as result for the Bayes’ estimate of the mean reaction time</p>
+<pre class="r"><code>n &lt;- 10
+xbar &lt;- 0.45
+sigma &lt;- 0.15
+mu0 &lt;- 0.35
+sigma0 &lt;- 0.1
+
+muhat &lt;- (n*xbar + mu0*sigma**2/sigma0**2)/(n + sigma**2/sigma0**2) 
+
+print(muhat)</code></pre>
+<pre><code>## [1] 0.4316327</code></pre>
 </div>
 <div id="exercise-7.2" class="section level3">
 <h3>Exercise 7.2</h3>
@@ -404,7 +433,7 @@ anova(roller.lm , roller.lm2)</code></pre>
 ##   Res.Df    RSS Df Sum of Sq      F Pr(&gt;F)
 ## 1      8 362.93                           
 ## 2      7 298.58  1    64.359 1.5089  0.259</code></pre>
-<p>These two models differ only in the use of <code>weight^2</code>. So ANOVA will test whether or not including this leads significant improvement. Adding this term spawned non-significant result (p=0.259). Thus we should reject second model, in other words adding <code>weight^2</code>didn’t lead better result.</p>
+<p>These two models differ only in the use of <code>weight^2</code>. So ANOVA will test whether or not including this leads significant improvement. Adding this term spawned non-significant result (p=0.259). Thus adding <code>weight^2</code> didn’t lead better result. In other words, second model didn’t explain data well.</p>
 </div>
 </div>
 <div id="cs" class="section level2 tabset">
@@ -428,18 +457,18 @@ system.time( for (i in 1:1000) {
 for (j in 1:100) {
 z[i] &lt;- z[i]+X[i,j]  }})</code></pre>
 <pre><code>##    user  system elapsed 
-##   0.014   0.001   0.015</code></pre>
+##    0.04    0.00    0.04</code></pre>
 <pre class="r"><code># Time evaluation of the second version (apply function)
 system.time(z1 &lt;- apply(X, 1, sum))</code></pre>
 <pre><code>##    user  system elapsed 
-##   0.002   0.000   0.002</code></pre>
+##    0.01    0.00    0.01</code></pre>
 <pre class="r"><code># Check between the first and second result
 identical(z,z1)</code></pre>
 <pre><code>## [1] TRUE</code></pre>
 <pre class="r"><code># Time evaluation of the third version (rowSums function)
 system.time(z2 &lt;- rowSums(X))</code></pre>
 <pre><code>##    user  system elapsed 
-##   0.001   0.000   0.001</code></pre>
+##       0       0       0</code></pre>
 <pre class="r"><code># Check between the first and third result
 identical(z,z2)</code></pre>
 <pre><code>## [1] TRUE</code></pre>
@@ -504,7 +533,7 @@ cat(&quot;p-value for test is:&quot;,pchisq(lrt,df=1,lower.tail = FALSE))</code>
 <p><span class="math display">\[ post=prior*like/sum(prior*like)\]</span> <strong>Compute the posterior probabilities of <span class="math inline">\(\mu\)</span> for this example.</strong></p>
 <p><strong>(e) Using the function <code>discint</code>, find an 80% probability interval for <span class="math inline">\(\mu\)</span></strong></p>
 <p><em>solution:</em></p>
-<pre class="r"><code>library('LearnBayes')
+<pre class="r"><code>library(&#39;LearnBayes&#39;)
 # main data
 mu &lt;- c(20,30,40,50,60,70)
 mu &lt;- array(mu)
@@ -558,6 +587,23 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
